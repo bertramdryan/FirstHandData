@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FirstHandDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="contact_id" />
+          </Key>
+          <Property Name="contact_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="first_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="last_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="company" Type="varchar" MaxLength="100" />
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="phone" Type="varchar" MaxLength="12" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="event_id" />
+          </Key>
+          <Property Name="event_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="event_name" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="location" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="start_date" Type="datetime" Nullable="false" />
+          <Property Name="finish_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Raffle">
+          <Key>
+            <PropertyRef Name="raffle_id" />
+          </Key>
+          <Property Name="raffle_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="contact_id" Type="int" Nullable="false" />
+          <Property Name="event_id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Raffle_contact_id_Contact_contact_id">
+          <End Role="Contact" Type="Self.Contact" Multiplicity="1" />
+          <End Role="Raffle" Type="Self.Raffle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contact">
+              <PropertyRef Name="contact_id" />
+            </Principal>
+            <Dependent Role="Raffle">
+              <PropertyRef Name="contact_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Raffle_event_id_Event_event_id">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="Raffle" Type="Self.Raffle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="event_id" />
+            </Principal>
+            <Dependent Role="Raffle">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FirstHandDBModelStoreContainer">
+          <EntitySet Name="Contact" EntityType="Self.Contact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Raffle" EntityType="Self.Raffle" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Raffle_contact_id_Contact_contact_id" Association="Self.FK_Raffle_contact_id_Contact_contact_id">
+            <End Role="Contact" EntitySet="Contact" />
+            <End Role="Raffle" EntitySet="Raffle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Raffle_event_id_Event_event_id" Association="Self.FK_Raffle_event_id_Event_event_id">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="Raffle" EntitySet="Raffle" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FirstHandDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="contact_id" />
+          </Key>
+          <Property Name="contact_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="first_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="company" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Raffles" Relationship="Self.FK_Raffle_contact_id_Contact_contact_id" FromRole="Contact" ToRole="Raffle" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="event_id" />
+          </Key>
+          <Property Name="event_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="event_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="location" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="start_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="finish_date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Raffles" Relationship="Self.FK_Raffle_event_id_Event_event_id" FromRole="Event" ToRole="Raffle" />
+        </EntityType>
+        <EntityType Name="Raffle">
+          <Key>
+            <PropertyRef Name="raffle_id" />
+          </Key>
+          <Property Name="raffle_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="contact_id" Type="Int32" Nullable="false" />
+          <Property Name="event_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Contact" Relationship="Self.FK_Raffle_contact_id_Contact_contact_id" FromRole="Raffle" ToRole="Contact" />
+          <NavigationProperty Name="Event" Relationship="Self.FK_Raffle_event_id_Event_event_id" FromRole="Raffle" ToRole="Event" />
+        </EntityType>
+        <Association Name="FK_Raffle_contact_id_Contact_contact_id">
+          <End Role="Contact" Type="Self.Contact" Multiplicity="1" />
+          <End Role="Raffle" Type="Self.Raffle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contact">
+              <PropertyRef Name="contact_id" />
+            </Principal>
+            <Dependent Role="Raffle">
+              <PropertyRef Name="contact_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Raffle_event_id_Event_event_id">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="Raffle" Type="Self.Raffle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="event_id" />
+            </Principal>
+            <Dependent Role="Raffle">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FirstHandDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Contacts" EntityType="Self.Contact" />
+          <EntitySet Name="Events" EntityType="Self.Event" />
+          <EntitySet Name="Raffles" EntityType="Self.Raffle" />
+          <AssociationSet Name="FK_Raffle_contact_id_Contact_contact_id" Association="Self.FK_Raffle_contact_id_Contact_contact_id">
+            <End Role="Contact" EntitySet="Contacts" />
+            <End Role="Raffle" EntitySet="Raffles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Raffle_event_id_Event_event_id" Association="Self.FK_Raffle_event_id_Event_event_id">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="Raffle" EntitySet="Raffles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FirstHandDBModelStoreContainer" CdmEntityContainer="FirstHandDBEntities">
+          <EntitySetMapping Name="Contacts">
+            <EntityTypeMapping TypeName="FirstHandDBModel.Contact">
+              <MappingFragment StoreEntitySet="Contact">
+                <ScalarProperty Name="contact_id" ColumnName="contact_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="company" ColumnName="company" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Events">
+            <EntityTypeMapping TypeName="FirstHandDBModel.Event">
+              <MappingFragment StoreEntitySet="Event">
+                <ScalarProperty Name="event_id" ColumnName="event_id" />
+                <ScalarProperty Name="event_name" ColumnName="event_name" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="finish_date" ColumnName="finish_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Raffles">
+            <EntityTypeMapping TypeName="FirstHandDBModel.Raffle">
+              <MappingFragment StoreEntitySet="Raffle">
+                <ScalarProperty Name="raffle_id" ColumnName="raffle_id" />
+                <ScalarProperty Name="contact_id" ColumnName="contact_id" />
+                <ScalarProperty Name="event_id" ColumnName="event_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
